@@ -221,6 +221,8 @@ from abc import abstractmethod, ABC
 import sqlalchemy
 
 from DB_handlers_cli_bot import *
+from models import Email, Record, Adress, Phone
+from db import db_session
 
 
 # GLOBALS
@@ -869,20 +871,43 @@ def save_func(name):
         
         print('Data base has been saved successfully!')
 
-def load_func(name):
+def load_func():
+
+    # class Record:
+    #
+    #     def __init__(self) -> None:
+    #         self.name = Name()
+    #         self.phone = Phone(add_book.phone)
+    #         self.email = Email()
+    #         self.adress = Adress()
+    #         self.record_dict = {
+    #             'Name': self.name.value,
+    #             'Phone': [self.phone.value],
+    #             'Birthday': None,
+    #             'Email': None,
+    #             'Adress': None
+    #         }
+
     try:
-        add_book.add_record('load', '0000000000')
-        add_book.add_notes('load', '0000000000')
-        
-        with open(name + '.obj', 'rb') as report:
-            add_book.data = pickle.load(report)
-            
-        with open('notes.csv', newline='') as fh:
-            reader = csv.DictReader(fh)
-            for row in reader:
-                add_book.notes_data[row['tag']] = row['note']
+
+        res = load_DB()
+
+        for key, value in res.items():
+
+            add_book.add_notes('load', '0000000000')
+            add_book.add_record(key, '0000000000')
+            add_book.data[key].phone = value.get('Phone')
+            add_book.data[key].adress = value.get('Adress')
+            add_book.data[key].email = value.get('Email')
+            add_book.data[key].record_dict = value
+
+
+
+        #{'Serhii': {'Name': 'Serhii', 'Phone': [('0675261531',)], 'Birthday': None, 'Email': [], 'Adress': []}}
+
+        ### FUNC_DB
                 
-            print('Data base has been loaded successfully!')
+        print('Data base has been loaded successfully!')
 
     except FileNotFoundError:
         print(
@@ -999,14 +1024,14 @@ def change_email_head(name, email):
 
 @input_error
 def add_adress_head(name, adress):
-    try:
+    #try:
         Record().add_adress(name, adress)  # 2
         add_adress_DB(name, adress)
         print('Adress has been added successfully!')
 
-    except:
-
-        print("Adress format problem")
+    # except :
+    #
+    #     print("Adress format problem")
 
 def add_notes_head(name, phone):  # name=tag phone=note
     tag = add_book.add_notes(name, phone)
@@ -1342,8 +1367,9 @@ def main():
             if stop_flag == 'stop':
                 break
 
-        except TypeError:
-            print('Unsuccessful operation. Please, try again')
+        # except TypeError as err:
+        #     print('Unsuccessful operation. Please, try again')
+        #     print (err)
             
         except EOFError as e:
             print(e)

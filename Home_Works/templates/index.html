@@ -18,17 +18,17 @@
 <!--          <li><a href="/tag/" role="button">Add Tag</a></li>-->
 <!--        </ul>-->
 <!--      </nav>-->
-      <h1>List existed records:</h1>
-      {% for record in records%}
-        {% for phone in phones%}
-            {%if record.id==phone.rec_id%}
-              <ul>
-                  <li>
-                      <h2>{{record.name}}, {{phone.phone_name}}, created:   {{record.created}} </h2>
-                  </li>
-              </ul>
-            {% endif %}
-        {% endfor %}
+
+
+      <h1>List of existed records:</h1>
+      {% for item in record_list%}
+
+          <ul>
+              <li>
+                  <h2>{{item.record_id}}.  {{item.name}}, {{item.phone}}, {{item.email}}, {{item.adress}} </h2>
+              </li>
+          </ul>
+
       {% endfor %}
     </main>
   </body>

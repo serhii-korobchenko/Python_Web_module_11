@@ -178,58 +178,40 @@ def change_adress_DB(name, new_adress):
     session.close()
 
 
-#add Serhii 0675261531
-# email1 = Email(email_name='jchild2008@gmail.com')
-# adress1 = Adress(adress_name='Kyiv. Zodchih st.')
-# phone1 = Phone(phone_name='0675261532')
+def load_DB():
+    engine = create_engine("sqlite:///cli_bot.db")
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-#TRACK_ACTIONS
+    records_DB = session.query(Record).all()
 
-# #1 STEP - Create 'Serhii" record and add phone - 0675261531
-# phone1 = Phone(phone_name='0675261531')
-# rec1 = Record(name="Serhii", phone=[phone1])
-# session.add(rec1)
-# session.commit()
+    DB_dict = {}
+    for record in records_DB:
+        record_dict = {
+            'Name': record.name,
+            'Phone': session.query(Phone.phone_name).filter(Phone.rec_id == record.id).one()[0],
+            'Birthday': None,
+            'Email': session.query(Email.email_name).filter(Email.rec_id == record.id).all(),
+            'Adress': session.query(Adress.adress_name).filter(Adress.rec_id == record.id).all()
+        }
+        DB_dict[record.name] = record_dict
 
-# #2 STEP - Create 'Serhii" record and add phone - 0675261531
-# phone1 = Phone(phone_name='0675261531')
-# rec1 = Record(name="Andrii", phone=[phone1])
-# session.add(rec1)
-# session.commit()
+    return DB_dict
+    # self.data[name] = Record()
 
-# #3 STEP - add email and adress to Serhii
-#
-# email1 = Email(email_name='jchild2008@gmail.com', rec_id=str(session.query(Record.id).filter(Record.name == "Serhii").first()[0]))
-# adress1 = Adress(adress_name='Kyiv. Zodchih st.', rec_id=str(session.query(Record.id).filter(Record.name == "Serhii").first()[0]))
-# session.add(email1)
-# session.add(adress1)
-# session.commit()
-
-# #4 STEP - add same email to Serhii
-#
-# email1 = Email(email_name='jchild2008@gmail.com', rec_id=str(session.query(Record.id).filter(Record.name == "Serhii").first()[0]))
-# session.add(email1)
-# session.commit()
-
-
-# #5 STEP - delete same email from Serhii
-# email1 = session.query(Email).filter(Email.email_name == 'jchild2008@gmail.com')
-# email1.delete()
-# session.commit()
-
-# #6 STEP - add email to Serhii again
-#
-# email1 = Email(email_name='jchild2008@gmail.com', rec_id=str(session.query(Record.id).filter(Record.name == "Serhii").first()[0]))
-# session.add(email1)
-# session.commit()
-
-
-#6 STEP - update email to Serhii
-
-# email1 = session.query(Email).filter(Email.email_name == 'jchild2008@gmail.com')
-# email1.update({'email_name': 'super@gmail.com'})
-# session.commit()
-
+    # def __init__(self) -> None:
+    #
+    #     self.name = Name()
+    #     self.phone = Phone(add_book.phone)
+    #     self.email = Email()
+    #     self.adress = Adress()
+    #     self.record_dict = {
+    #         'Name': self.name.value,
+    #         'Phone': [self.phone.value],
+    #         'Birthday': None,
+    #         'Email': None,
+    #         'Adress': None
+    #     }
 
 
 if __name__ == '__main__':
@@ -242,7 +224,10 @@ if __name__ == '__main__':
     # change_email_DB('Bumba', '2@2.2')
     # add_adress_DB('Bumba', 'Vinica')
     # change_adress_DB('Bumba', 'Lviv')
-    look_up_DB ('11')
+    #look_up_DB ('11')
+    res= load_DB()
+    print(res)
+
 
 
 

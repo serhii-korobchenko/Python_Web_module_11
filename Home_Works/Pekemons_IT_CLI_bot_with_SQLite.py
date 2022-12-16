@@ -1331,6 +1331,7 @@ def main():
     stop_flag = ''
 
     print("Bot has been started!\nFor additional information enter 'help'")
+    load_func()
     while True:
         try:
 
@@ -1367,9 +1368,9 @@ def main():
             if stop_flag == 'stop':
                 break
 
-        # except TypeError as err:
-        #     print('Unsuccessful operation. Please, try again')
-        #     print (err)
+        except TypeError as err:
+            print('Unsuccessful operation. Please, try again')
+
             
         except EOFError as e:
             print(e)

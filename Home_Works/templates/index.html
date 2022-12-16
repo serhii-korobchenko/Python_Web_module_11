@@ -10,16 +10,6 @@
   </head>
   <body>
     <main class="container">
-<!--      <nav-->
-<!--        style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px"-->
-<!--      >-->
-<!--        <ul>-->
-<!--          <li><a href="/note/" role="button">Add note</a></li>-->
-<!--          <li><a href="/tag/" role="button">Add Tag</a></li>-->
-<!--        </ul>-->
-<!--      </nav>-->
-
-
       <h1>List of existed records:</h1>
       {% for item in record_list%}
 
@@ -30,6 +20,20 @@
           </ul>
 
       {% endfor %}
+
+      <form method="POST" action="/note">
+        <div style="padding: 10px">
+          <label
+            >Command:
+            <input type="text" name="name" required />
+          </label>
+        </div>
+
+        <div class="grid">
+          <button type="reset" class="secondary">Reset</button>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
     </main>
   </body>
 </html>

@@ -1,7 +1,7 @@
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import sessionmaker, joinedload
 from models import Email, Record, Adress, Phone
-from sqlalchemy import and_
+from sqlalchemy import and_, delete
 from sqlalchemy.schema import MetaData
 from sqlalchemy import or_
 
@@ -92,7 +92,7 @@ def add_records_DB(name, phone):
     session = Session()
 
     phone1 = Phone(phone_name=phone)
-    rec1 = Record(name=name, phone=[phone1])
+    rec1 = Record(name=name, phones=[phone1])
     session.add(rec1)
     session.commit()
     session.close()
@@ -131,9 +131,12 @@ def del_rec_DB(name):
     engine = create_engine("sqlite:///cli_bot.db")
     Session = sessionmaker(bind=engine)
     session = Session()
-
-    rec1 = session.query(Record).filter(Record.name == name)
-    rec1.delete()
+    rec_id = str(session.query(Record.id).filter(Record.name == name).one()[0])
+    session.query(Phone).filter(Phone.rec_id==rec_id).delete()
+    session.query(Email).filter(Email.rec_id == rec_id).delete()
+    session.query(Adress).filter(Adress.rec_id == rec_id).delete()
+    #phone1 = session.query(Phone).filter(Phone.rec_id==str(session.query(Record.id).filter(Record.name == name).all()))
+    session.query(Record).filter(Record.name == name).delete()
     session.commit()
     session.close()
 

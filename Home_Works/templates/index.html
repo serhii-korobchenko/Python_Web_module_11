@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Organizer</title>
+    <title>CLI-bot</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
@@ -10,30 +10,57 @@
   </head>
   <body>
     <main class="container">
-      <h1>List of existed records:</h1>
+      <h3><mark>CLI bot is working. Hi there!</mark></h3>
+      <h3><u> List of existed records extracted from DB: </u></h3>
       {% for item in record_list%}
 
           <ul>
               <li>
-                  <h2>{{item.record_id}}.  {{item.name}}, {{item.phone}}, {{item.email}}, {{item.adress}} </h2>
+                  <h6 style="line-height:0%"> Record # {{item.record_id}}. <mark>{{item.name}}</mark>  </h6>
+                  <h7 style="line-height:0%"> <u>Phones</u> : </h7>
+                  {% for phone in item.phone%}
+                      <ul>
+                           <li>
+                               <h10 style="line-height:0%">-----------------{{phone}} </h10>
+                           </li>
+                       </ul>
+                  {% endfor %}
+                  <h7 style="line-height:0%"> <u>Emails</u> : </h7>
+                  {% for email in item.email%}
+                      <ul>
+                           <li>
+                               <h10 style="line-height:0%">-----------------{{email}} </h10>
+                           </li>
+                       </ul>
+                  {% endfor %}
+                  <h7 style="line-height:0%"> <u>Adress</u> : </h7>
+                  {% for adress in item.adress%}
+                      <ul>
+                           <li>
+                               <h10 style="line-height:0%">-----------------{{adress}} </h10>
+                           </li>
+                       </ul>
+                  {% endfor %}
+
               </li>
           </ul>
 
       {% endfor %}
 
-      <form method="POST" action="/note">
+      <form method="POST" action="/">
         <div style="padding: 10px">
           <label
-            >Command:
-            <input type="text" name="name" required />
+            >Put command here:
+            <input type="text" name="command" required />
           </label>
         </div>
 
         <div class="grid">
-          <button type="reset" class="secondary">Reset</button>
           <button type="submit">Submit</button>
+          <button type="reset" class="secondary">Reset</button>
         </div>
       </form>
+      {% extends "layout.html" %}
     </main>
   </body>
 </html>

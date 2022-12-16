@@ -4,6 +4,7 @@ from models import Email, Record, Adress, Phone
 from sqlalchemy import and_, delete
 from sqlalchemy.schema import MetaData
 from sqlalchemy import or_
+from flask import flash
 
 
 
@@ -47,7 +48,8 @@ def look_up_DB (text):
                 if lookup_res.lower().find(text.lower()) >= 0:
                     print(
                         f'Looked up text was found in next statement: "{lookup_res}" in record: "{session.query(Record.name).filter(Record.id == outer[1]).first()[0]}"')
-
+                    flash(
+                        f'Looked up text was found in next statement: "{lookup_res}" in record: "{session.query(Record.name).filter(Record.id == outer[1]).first()[0]}"')
 
 
 
@@ -192,7 +194,7 @@ def load_DB():
     for record in records_DB:
         record_dict = {
             'Name': record.name,
-            'Phone': session.query(Phone.phone_name).filter(Phone.rec_id == record.id).one()[0],
+            'Phone': session.query(Phone.phone_name).filter(Phone.rec_id == record.id).all(),
             'Birthday': None,
             'Email': session.query(Email.email_name).filter(Email.rec_id == record.id).all(),
             'Adress': session.query(Adress.adress_name).filter(Adress.rec_id == record.id).all()

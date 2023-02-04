@@ -54,6 +54,7 @@ help_information = ' Bot undestands next commands:\
           - "addnotes" name text" - add notes to record\
           - "addadress" name text" - add adress to record\
           - "addbirthday" name" - add birthday to record \
+          - "daysbeforebirth" # days" - check birthdays in time period \
           - "good bye" or "close" or "exit" - bot stops work and messege "Good bye!" '
 
 
@@ -571,6 +572,10 @@ def lookup_func(text):
     look_up_DB (text)
 
 
+def birthdaylook_func(number_days):
+    birthday_in_days(number_days)
+
+
         
 @input_error
 def del_record_hand(name):  # ---- !!!!!
@@ -677,7 +682,7 @@ def main(command):
                       'help': help_func, 'lookup': lookup_func,
 
                      'delrec': del_record_hand, 'addemail': add_email_head, 'addadress': add_adress_head,
-                     'changeemail': change_email_head
+                     'changeemail': change_email_head, 'daysbeforebirth':birthdaylook_func
                      }
 
     stop_flag = ''

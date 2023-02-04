@@ -1,5 +1,3 @@
-import json
-from copy import copy
 
 from flask import Flask, render_template, request, redirect, flash, url_for
 from models import Email, Record, Adress, Phone, Birthday
@@ -14,8 +12,6 @@ app.debug = True
 app.env = "development"
 app.logger.setLevel(DEBUG)
 
-
-
 class Record_Object:
     def __init__(self, name, phone, adress=None, email=None, birthday=None):
         self.name = name
@@ -24,10 +20,8 @@ class Record_Object:
         self.email = email
         self.birthday = birthday
 
-
 @app.route("/", methods=['GET', 'POST'], strict_slashes=False)
 def index():
-
 
     command = None
     records = db_session.query(Record).all()
@@ -63,19 +57,13 @@ def index():
 @app.route("/birthday/", methods=["GET", "POST"], strict_slashes=False)
 def add_birthday():
 
-
-
     if request.method == "GET":
         messages = request.args['messages']
         global name_up
         name_up = messages
 
-
     else:
-        # name = request.form.get("name")
         name = name_up
-
-
         birthday_date_str = request.form.get("birthday_date")
         birthday_date = datetime.strptime(birthday_date_str, '%Y-%m-%d')
         print(f'TYPE OF birthday_date {type(birthday_date)}, RESULT = {birthday_date}')
@@ -91,16 +79,10 @@ def add_birthday():
 
         return redirect("/")
 
-
-
-
-    # return render_template("add_birthday.html", messages=json.loads(messages))
     return render_template("add_birthday.html", messages=messages)
 
 @app.route("/data_base/", methods=["GET"], strict_slashes=False)
 def data_base():
-
-
     command = None
     records = db_session.query(Record).all()
     phones = db_session.query(Phone).all()

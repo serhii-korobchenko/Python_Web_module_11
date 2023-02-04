@@ -1,13 +1,44 @@
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import sessionmaker, joinedload
+from sqlalchemy.sql.operators import contains
+
 from models import Email, Record, Adress, Phone, Birthday
 from sqlalchemy import and_, delete
 from sqlalchemy.schema import MetaData
 from sqlalchemy import or_
 from flask import request, flash, redirect, render_template, url_for, Flask
-from datetime import datetime
-# from app_flask import app
+from datetime import datetime, timedelta, date
+from db import db_session
 
+def birthday_in_days(number_days):
+
+    # checked_date = datetime(year=datetime.now().year, month=datetime.now().month,
+    #                         day=datetime.now().day + int(number_days))
+
+    checked_datetime = datetime.now() + timedelta(days=int(number_days))
+    checked_date = checked_datetime.date()
+    
+    flag_birth = 0
+
+    birthday_list = db_session.query(Birthday.birthday_date).all()
+
+    for item in birthday_list:
+
+        record_date = datetime(year=datetime.now().year, month=item[0].month,
+                            day=item[0].day)
+
+
+        if checked_date == record_date.date():
+            rec_id = db_session.query(Birthday.rec_id).filter(Birthday.birthday_date == item[0]).first()
+            name = db_session.query(Record.name).filter(Record.id == rec_id[0]).first()
+
+            print(f' {name[0]} has birthday in {number_days} days! ')
+            flash(f' {name[0]} has birthday in {number_days} days! ')
+            flag_birth += 1
+
+    if flag_birth == 0:
+        print(f'No one  has birthday in {number_days} days!')
+        flash(f'No one  has birthday in {number_days} days!')
 
 def look_up_DB (text):
     engine = create_engine("sqlite:///cli_bot.db")
@@ -21,12 +52,11 @@ def look_up_DB (text):
     for item in query_list:
 
         if session.query(item[0]).all():
-            #print(session.query(item[0], item[1]).all())
+
             rec_id = session.query(item[1]).all()
-            #print(f'rec_id = {rec_id}')
+
 
             for outer in session.query(item[0], item[1]).all():
-                #print (outer[0])
 
                 if type(outer[0]) != str:
                     lookup_res = outer[0].strftime('%A %d %B %Y')
@@ -129,29 +159,6 @@ def add_adress_DB(name, adress):
     session.commit()
     session.close()
 
-def add_birthday_DB():
-
-    print('REDIRECT!!!!')
-    #return redirect(url_for('add_birthday'))
-    return redirect('https://www.google.com')
-    # engine = create_engine("sqlite:///cli_bot.db")
-    # Session = sessionmaker(bind=engine)
-    # session = Session()
-    #
-    #
-    # if request.method == "POST":
-    #
-    #     birthday_date_str = request.form.get("birthday_date")
-    #     birthday_date = datetime.strptime(birthday_date_str, '%Y-%m-%d')
-    #     print (f'TYPE OF birthday_date {type(birthday_date)}, RESULT = {birthday_date}')
-    #
-    #     birthday = Birthday(birthday_date=birthday_date, rec_id=str(session.query(Record.id).filter(Record.name == name).first()[0]))
-    #     session.add(birthday)
-    #     session.commit()
-    #
-    #     return redirect("/")
-    #
-    # return render_template("add_birthday.html")
 
 def change_adress_DB(name, new_adress):
     engine = create_engine("sqlite:///cli_bot.db")

@@ -10,42 +10,19 @@
   </head>
   <body>
     <main class="container">
+
+      <nav
+        style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px"
+      >
+        <ul>
+          <li><a href="/data_base/" role="button">See DataBase</a></li>
+
+        </ul>
+      </nav>
+
       <h3><mark>CLI bot is working. Hi there!</mark></h3>
-      <h3><u> List of existed records extracted from DB: </u></h3>
-      {% for item in record_list%}
+      <marquee behavior="scroll" direction="left">{{help_information}} </marquee>
 
-          <ul>
-              <li>
-                  <h6 style="line-height:0%"> Record # {{item.record_id}}. <mark>{{item.name}}</mark>  </h6>
-                  <h7 style="line-height:0%"> <u>Phones</u> : </h7>
-                  {% for phone in item.phone%}
-                      <ul>
-                           <li>
-                               <h10 style="line-height:0%">-----------------{{phone}} </h10>
-                           </li>
-                       </ul>
-                  {% endfor %}
-                  <h7 style="line-height:0%"> <u>Emails</u> : </h7>
-                  {% for email in item.email%}
-                      <ul>
-                           <li>
-                               <h10 style="line-height:0%">-----------------{{email}} </h10>
-                           </li>
-                       </ul>
-                  {% endfor %}
-                  <h7 style="line-height:0%"> <u>Adress</u> : </h7>
-                  {% for adress in item.adress%}
-                      <ul>
-                           <li>
-                               <h10 style="line-height:0%">-----------------{{adress}} </h10>
-                           </li>
-                       </ul>
-                  {% endfor %}
-
-              </li>
-          </ul>
-
-      {% endfor %}
 
       <form method="POST" action="/">
         <div style="padding: 10px">

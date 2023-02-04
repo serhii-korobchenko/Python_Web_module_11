@@ -1,13 +1,9 @@
 from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, Boolean
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import ForeignKey, Table
-from sqlalchemy.sql.sqltypes import DateTime
 
-
-Base = declarative_base()
+from db import Base, engine, db_session
 
 #таблица для связи many-to-many между таблицами records и email
 record_m2m_phone = Table(
@@ -27,6 +23,7 @@ class Record(Base):
     emails = relationship("Email", cascade="all, delete", backref="records")
     adresses = relationship("Adress", cascade="all, delete",  backref="records")
     phones = relationship("Phone", cascade="all, delete",  backref="records")
+    birthday = relationship("Birthday", cascade="all, delete",  backref="records")
     #phones = relationship("Phone",  secondary=record_m2m_phone, cascade="all, delete", backref="records")
 
 # Таблица Email
@@ -51,6 +48,14 @@ class Phone(Base):
     rec_id = Column(Integer, ForeignKey("records.id", ondelete="cascade"))
 
 
+class Birthday(Base):
+    __tablename__ = "birthday"
+    id = Column(Integer, primary_key=True)
+    birthday_date = Column('birthday_date', DateTime, default=datetime.now())
+    rec_id = Column(Integer, ForeignKey("records.id", ondelete="cascade"))
 
 #alembic revision --autogenerate -m 'Init'
 #alembic upgrade head
+
+if __name__ == "__main__":
+    Base.metadata.create_all(engine)

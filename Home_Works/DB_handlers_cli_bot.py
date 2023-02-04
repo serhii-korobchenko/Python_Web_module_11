@@ -1,33 +1,21 @@
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import sessionmaker, joinedload
-from models import Email, Record, Adress, Phone
+from models import Email, Record, Adress, Phone, Birthday
 from sqlalchemy import and_, delete
 from sqlalchemy.schema import MetaData
 from sqlalchemy import or_
-from flask import flash
-
-
+from flask import request, flash, redirect, render_template, url_for, Flask
+from datetime import datetime
+# from app_flask import app
 
 
 def look_up_DB (text):
     engine = create_engine("sqlite:///cli_bot.db")
     Session = sessionmaker(bind=engine)
     session = Session()
+    global flag_lookup
+    flag_lookup = 0
 
-
-    """
-    SELECT r.name, r.created, p.phone_name
-    FROM records r
-    LEFT JOIN phones p ON r.id = p.rec_id
-    """
-    # result = session.query\
-    #     (Record.name, Record.created, Phone.phone_name, Email.email_name) \
-    #     .select_from(Record)\
-    #     .join(Email) \
-    #     .join(Adress) \
-    #     .join(Phone).all()
-    #
-    # print (result)
     query_list = [(Record.name, Record.id), (Record.created, Record.id), (Email.email_name, Email.rec_id),\
                   (Adress.adress_name, Adress.rec_id), (Phone.phone_name, Phone.rec_id)]
     for item in query_list:
@@ -51,42 +39,11 @@ def look_up_DB (text):
                     flash(
                         f'Looked up text was found in next statement: "{lookup_res}" in record: "{session.query(Record.name).filter(Record.id == outer[1]).first()[0]}"')
 
+                    flag_lookup = 1
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-    Знайти 5 студентів з найбільшим середнім балом по всім предметам
-    :return:
-    """
-# result = session.query
-#     (Student.fullname, func.round(func.avg(Grade.grade), 2).label('avg_grade')) \
-#     .select_from(Grade).\
-#     join(Student).\
-#     group_by(Student.id).\
-#     order_by(desc('avg_grade')).\
-#     imit(5).all()
-# return result
-
-
-# SELECT s.name_student, round (avg(g.grade), 2) AS avg_grade
-# FROM grades g
-# LEFT JOIN students s ON s.id = g.student_id
-# GROUP BY s.id
-# ORDER BY avg_grade DESC
-# LIMIT 5;
-
-
+    if flag_lookup == 0:
+        print(f'Unfortunately, Nothing was found. Sorry!')
+        flash(f'Unfortunately, Nothing was found. Sorry!')
 
 def add_records_DB(name, phone):
     engine = create_engine("sqlite:///cli_bot.db")
@@ -172,6 +129,30 @@ def add_adress_DB(name, adress):
     session.commit()
     session.close()
 
+def add_birthday_DB():
+
+    print('REDIRECT!!!!')
+    #return redirect(url_for('add_birthday'))
+    return redirect('https://www.google.com')
+    # engine = create_engine("sqlite:///cli_bot.db")
+    # Session = sessionmaker(bind=engine)
+    # session = Session()
+    #
+    #
+    # if request.method == "POST":
+    #
+    #     birthday_date_str = request.form.get("birthday_date")
+    #     birthday_date = datetime.strptime(birthday_date_str, '%Y-%m-%d')
+    #     print (f'TYPE OF birthday_date {type(birthday_date)}, RESULT = {birthday_date}')
+    #
+    #     birthday = Birthday(birthday_date=birthday_date, rec_id=str(session.query(Record.id).filter(Record.name == name).first()[0]))
+    #     session.add(birthday)
+    #     session.commit()
+    #
+    #     return redirect("/")
+    #
+    # return render_template("add_birthday.html")
+
 def change_adress_DB(name, new_adress):
     engine = create_engine("sqlite:///cli_bot.db")
     Session = sessionmaker(bind=engine)
@@ -202,21 +183,7 @@ def load_DB():
         DB_dict[record.name] = record_dict
 
     return DB_dict
-    # self.data[name] = Record()
 
-    # def __init__(self) -> None:
-    #
-    #     self.name = Name()
-    #     self.phone = Phone(add_book.phone)
-    #     self.email = Email()
-    #     self.adress = Adress()
-    #     self.record_dict = {
-    #         'Name': self.name.value,
-    #         'Phone': [self.phone.value],
-    #         'Birthday': None,
-    #         'Email': None,
-    #         'Adress': None
-    #     }
 
 
 if __name__ == '__main__':

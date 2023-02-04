@@ -15,6 +15,7 @@
 # new+                      - "addemail' name email" - add email to record
 # new+                      - "changeemail" name new_email - change all emails on new one
 # new+                      - "addadress' name text" - add adress to record
+# new+                      - "addbirthday' name" - add birthday to record
 #                           - "good bye" or "close" or "exit" - bot stops work and message "Good bye!"
 
 
@@ -38,6 +39,23 @@ x = 0
 page = 1
 command_list = []
 
+help_information = ' Bot undestands next commands:\
+          - "hello" - answear: "How can I help you?"\
+          - "add" name telephone number" - save new contact\
+          - "change" name telephone number" - save new telephone number for existed contact\
+          - "phone" name" - show telephone number\
+          - "addnum" name telephone number" - add aditional tel number for certain contact\
+          - "del" name telephone number" - del tel number for certain contact\
+          - "help" - bot show commands explanations\
+          - "lookup" text" - find text in records (no difference which case of characters)\
+          - "delrec" name" - delete record from AddressBook\
+          - "addemail" name email" - add email to record\
+          - "changeemail" name new_email" - change all emails on new one\
+          - "addnotes" name text" - add notes to record\
+          - "addadress" name text" - add adress to record\
+          - "addbirthday" name" - add birthday to record \
+          - "good bye" or "close" or "exit" - bot stops work and messege "Good bye!" '
+
 
 class AddressBook (UserDict):
 
@@ -45,8 +63,6 @@ class AddressBook (UserDict):
         UserDict.__init__(self)
         self.notes_data = {}
         self.presenter = PresenterRecords()
-        
-
 
     def add_record(self, name, phone):
 
@@ -524,36 +540,8 @@ def del_func(name, phone):  # 1&2
 
 
 def help_func():
-    print(' Bot undestands next commands:\n'
-          '- "hello" - answear: "How can I help you?"\n'
-          '- "add" name telephone number" - save new contact\n'
-          '- "change" name telephone number" - save new telephone number for existed contact\n'
-          '- "phone" name" - show telephone number\n'
-          '- "addnum" name telephone number" - add aditional tel number for certain contact\n'
-          '- "del" name telephone number" - del tel number for certain contact\n'
-          '- "help" - bot show commands explanations\n'
-          '- "lookup" text" - find text in records (no difference which case of characters)\n'
-          '- "delrec" name" - delete record from AddressBook \n'
-          '- "addemail" name email" - add email to record \n'
-          '- "changeemail" name new_email" - change all emails on new one \n'
-          '- "addnotes" name text" - add notes to record \n'
-          '- "addadress" name text" - add adress to record \n'
-          '- "good bye" or "close" or "exit" - bot stops work and messege "Good bye!" ')
-    flash(' Bot undestands next commands:\n'
-          '- "hello" - answear: "How can I help you?"\n'
-          '- "add" name telephone number" - save new contact\n'
-          '- "change" name telephone number" - save new telephone number for existed contact\n'
-          '- "phone" name" - show telephone number\n'
-          '- "addnum" name telephone number" - add aditional tel number for certain contact\n'
-          '- "del" name telephone number" - del tel number for certain contact\n'
-          '- "help" - bot show commands explanations\n'
-          '- "lookup" text" - find text in records (no difference which case of characters)\n'
-          '- "delrec" name" - delete record from AddressBook \n'
-          '- "addemail" name email" - add email to record \n'
-          '- "changeemail" name new_email" - change all emails on new one \n'
-          '- "addnotes" name text" - add notes to record \n'
-          '- "addadress" name text" - add adress to record \n'
-          '- "good bye" or "close" or "exit" - bot stops work and messege "Good bye!" ')
+    print(help_information)
+    flash(help_information)
 
 
 def load_func():

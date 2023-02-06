@@ -54,6 +54,24 @@ class Birthday(Base):
     birthday_date = Column('birthday_date', DateTime, default=datetime.now())
     rec_id = Column(Integer, ForeignKey("records.id", ondelete="cascade"))
 
+
+
+
+
+class Note(Base):
+    __tablename__ = "notes"
+    id = Column(Integer, primary_key=True)
+    note_title = Column(String(50), nullable=False, unique=True)
+    note_text = Column(String(250), nullable=False, unique=True)
+    created = Column(DateTime, default=datetime.now())
+    tags = relationship("Tag", cascade="all, delete",  backref="notes")
+
+class Tag(Base):
+    __tablename__ = "tags"
+    id = Column(Integer, primary_key=True)
+    tag_text = Column(String(50), nullable=False, unique=True)
+    note_id = Column(Integer, ForeignKey("notes.id", ondelete="cascade"))
+
 #alembic revision --autogenerate -m 'Init'
 #alembic upgrade head
 

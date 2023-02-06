@@ -11,11 +11,15 @@
 #                          - "del' name telephone number" - del tel number for certain contact
 #                          - "help" - bot show commands explanations
 #                          - "lookup' text" - find text in records (no difference which case of characters)
-# new+                      - "delrec' name" - delete record from AddressBook
-# new+                      - "addemail' name email" - add email to record
-# new+                      - "changeemail" name new_email - change all emails on new one
-# new+                      - "addadress' name text" - add adress to record
-# new+                      - "addbirthday' name" - add birthday to record
+#                          - "delrec' name" - delete record from AddressBook
+#                           - "addemail' name email" - add email to record
+#                           - "changeemail" name new_email - change all emails on new one
+#                           - "addadress' name text" - add adress to record
+#                           - "addbirthday' name" - add birthday to record
+# new                       - "addnote' note_title text" - add note to DB
+# new                       - "delnote' note_title - del note from DB
+# new                       - "addtag' text note title " - add tag to Note
+# new                       - "deltag' text" - del tag from DB
 #                           - "good bye" or "close" or "exit" - bot stops work and message "Good bye!"
 
 
@@ -55,6 +59,10 @@ help_information = ' Bot undestands next commands:\
           - "addadress" name text" - add adress to record\
           - "addbirthday" name" - add birthday to record \
           - "daysbeforebirth" # days" - check birthdays in time period \
+          - "addnote title text" - add note to DB\
+          - "delnote title - del note from DB\
+          - "addtag text note_title " - add tag to Note\
+          - "deltag text" - del tag from DB\
           - "good bye" or "close" or "exit" - bot stops work and messege "Good bye!" '
 
 
@@ -575,6 +583,23 @@ def lookup_func(text):
 def birthdaylook_func(number_days):
     birthday_in_days(number_days)
 
+def addnote_func(title, text):
+    addnote_func_DB(title, text)
+    print('Note has been added successfully!')
+    flash('Note has been added successfully!')
+
+def delnote_func(title):
+    delnote_func_DB(title)
+    print('Note has been deleted successfully!')
+    flash('Note has been deleted successfully!')
+
+
+def addtag_func(name, note):
+    pass
+
+def deltag_func(name):
+    pass
+
 
         
 @input_error
@@ -680,6 +705,8 @@ def main(command):
                      'phone': phone_func,  'good': good_buy_func,
                      'close': good_buy_func, 'exit': good_buy_func, 'addnum': addnum_func, 'del': del_func,
                       'help': help_func, 'lookup': lookup_func,
+                     'addnote': addnote_func, 'delnote': delnote_func,
+                     'addtag': addtag_func, 'deltag': deltag_func,
 
                      'delrec': del_record_hand, 'addemail': add_email_head, 'addadress': add_adress_head,
                      'changeemail': change_email_head, 'daysbeforebirth':birthdaylook_func
